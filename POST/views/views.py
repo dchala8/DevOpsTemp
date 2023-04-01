@@ -1,17 +1,20 @@
-from decimal import Decimal
-from http.client import NOT_FOUND
 from flask import request
 from flask_restful import Resource
-from sqlalchemy.exc import IntegrityError
-import datetime
 from POST.models import db, Blacklist, BlacklistSchema
 
-
 blacklist_schema = BlacklistSchema()
+BEARER_TOKEN = "Bearer kfsdmxcvnms82439wwqeqe1sdfs5sdqe56"
 
 class ViewBlacklist(Resource):
 
     def post(self,):
+        if 'Authorization' in request.headers:
+            request_bearer_token = str(request.headers['Authorization'])
+            if request_bearer_token != BEARER_TOKEN:
+                return ("Not authorized"), 403
+        else:
+            return ("Must authenticate"), 400
+        
         if request.method=='POST':
             newBlacklist = Blacklist(email = request.json.get("email"),
                                      app_uuid = request.json.get("app_uuid"),
