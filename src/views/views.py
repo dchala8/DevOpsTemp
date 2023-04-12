@@ -40,7 +40,7 @@ class ViewBlacklist(Resource):
                                         client_ip = request.remote_addr)
                 db.session.add(newBlacklist)
                 db.session.commit()
-                return {"Code": "200", "message": "blakclist created"}, 200
+                return {"Code": "200", "message": "blacklist created"}, 200
             else:
                 return {"status_code": "400", "message": ""}, 400
         else:
