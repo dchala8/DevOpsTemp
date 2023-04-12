@@ -16,3 +16,4 @@ db.create_all()
 
 api = Api(app)
 api.add_resource(ViewBlacklist, '/blacklists/<string:email>')
+api.add_resource(ViewBlacklist, '/blacklists')
