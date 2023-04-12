@@ -1,7 +1,5 @@
 from flask import request
 from flask_restful import Resource
-from flask_sqlalchemy import Model, SQLAlchemy
-import datetime 
 from models import Blacklist, BlacklistSchema, db
 
 blacklist_schema = BlacklistSchema()
@@ -34,11 +32,11 @@ class ViewBlacklist(Resource):
             return ("Must authenticate"), 400
         
         if request.method=='POST' and request.json is not None:
-            if 'email' in request.json and 'app_uuid' in request.json and 'blocked_reason' in request.json:
+            if 'email' in request.json and 'app_uuid' in request.json and 'blocked_reason' in request.json and 'timestamp' in request.json:
                 newBlacklist = Blacklist(email = request.json.get("email"),
                                         app_uuid = request.json.get("app_uuid"),
                                         blocked_reason = request.json.get("blocked_reason"),
-                                        timestamp = datetime.datetime.utcnow,
+                                        timestamp = request.json.get("timestamp"),
                                         client_ip = request.remote_addr)
                 db.session.add(newBlacklist)
                 db.session.commit()
