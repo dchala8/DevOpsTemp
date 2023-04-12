@@ -17,7 +17,7 @@ class ViewBlacklistGet(Resource):
         
         record = Blacklist.query.filter(Blacklist.email == email).first()
         if record is not None:
-            return ({"is_in_black_list": True}), 200
+            return ({"is_in_black_list": True, "reason": record.blocked_reason}), 200
         else:
             return ({"is_in_black_list": False}), 200
         
