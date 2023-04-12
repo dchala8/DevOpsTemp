@@ -44,3 +44,7 @@ class ViewBlacklist(Resource):
                 return {"status_code": "400", "message": ""}, 400
         else:
             return {"status_code": "404", "message": "NOT FOUND"}, 404
+    
+class ViewBlacklistHealth(Resource):
+    def get(self,):
+        return "Healthy", 200
