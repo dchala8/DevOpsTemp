@@ -4,7 +4,7 @@ from src.models import db
 from src.views import (ViewBlacklist)
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:devops1234@database-1.cyxrkg2exb5u.us-east-2.rds.amazonaws.com:5432/blacklist'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:devops1234@database-blacklist.cyxrkg2exb5u.us-east-2.rds.amazonaws.com:5432/blacklist'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
