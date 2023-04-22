@@ -15,3 +15,6 @@ SQLAlchemy==1.4.15
 Werkzeug==2.2.2
 gunicorn==20.1.0
 psycopg2-binary
+requests
+faker
+coverage
