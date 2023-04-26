@@ -4,6 +4,9 @@ phases:
   pre_build:
     commands:
       - pip install -r requirements.txt
+  build:
+    commands:
+      - py -m unittest tests/tests.py
 artifacts:
   files:
     - '**/*'
