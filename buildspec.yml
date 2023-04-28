@@ -24,6 +24,8 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push 309801132622.dkr.ecr.us-east-2.amazonaws.com/blacklist_c2jd:latest
+      - echo Stopping database...
+      - aws rds stop-db-instance --db-instance-identifier database-blacklist --no-cli-pager
 artifacts:
   files:
     - '**/*'
