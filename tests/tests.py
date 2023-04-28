@@ -12,7 +12,7 @@ class TestUsers(TestCase):
     #TESTS FOR HEALTH CHECK
     def test_success_health_check(self):
         healthBlacklists_request = self.client.get("/", headers={'Content-Type': 'application/json'})
-        self.assertEqual(healthBlacklists_request.status_code, 201)
+        self.assertEqual(healthBlacklists_request.status_code, 200)
         
         
     #TESTS FOR THE POST METHOD
