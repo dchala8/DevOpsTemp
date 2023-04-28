@@ -9,7 +9,7 @@ class TestUsers(TestCase):
         self.data_factory = Faker()
         self.client = application.test_client()
         
-    #TESTS FOR HEALTH CHECK
+    #TESTS FOR HEALTH CHECK-
     def test_success_health_check(self):
         healthBlacklists_request = self.client.get("/", headers={'Content-Type': 'application/json'})
         self.assertEqual(healthBlacklists_request.status_code, 200)
