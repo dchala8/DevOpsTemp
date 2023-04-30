@@ -1,0 +1,408 @@
+{
+	"info": {
+		"_postman_id": "78c64271-4c4e-4475-bbe8-e4419a40b6ac",
+		"name": "API Blacklist",
+		"description": "# Descripción\n\nAPI encargada de gestionar la lista negra de emails\n\n## **Endpoint de verificacion de email**\n\n### (GET) /blacklists/\n\nEncargado de validar si un email esta o no en lista negra solo procesa la informacion si se entrega un token de autenticacion valido, en tal caso se devuelve una respuesta json donde existe la propiedad \"is_in_black_list\" que tiene un valor de verdadero o falso\n\nEndFragment\n\n## **Endpoint de adición de email**\n\n### (POST) /blacklists/< string:email >\n\nEncargado de agregar un email a la lista negra solo procesa la informacion si se entrega un token de autenticacion valido y los datos necesarios que son: email, app_uuid y blocked reason, en tal caso se devuelve una respuesta json con un mensaje informado si el correo pudo o no ser agreagado",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26691395",
+		"_collection_link": "https://blue-station-978338.postman.co/workspace/C2JD~a6519bd2-4cdf-4e86-9b12-b4ee7b39b989/collection/26691395-78c64271-4c4e-4475-bbe8-e4419a40b6ac?action=share&creator=26691395&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Query email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", () => {",
+							"  pm.response.to.have.status(403);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer TOKEN_EJEMPLO",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}/blacklists/correo@correo.com",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"blacklists",
+						"correo@correo.com"
+					]
+				},
+				"description": "Este recurso permite consultar al API un correo electrónico a fin de determinar si este se encuentra o no en la lista negra de correos electrónicos.\n\nSi el correo consultado esta en la lista negra, se indica el motivo por el cual se agregó"
+			},
+			"response": [
+				{
+					"name": "Consulta Exitosa",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer TOKEN_EJEMPLO",
+								"description": "Se debe enviar la palabra \"Bearer\" seguida del token suministrado para autenticación",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://blacklist-c2jd-env-1.eba-k3fddmhn.us-east-2.elasticbeanstalk.com/blacklists/correo@correo.com",
+							"protocol": "http",
+							"host": [
+								"blacklist-c2jd-env-1",
+								"eba-k3fddmhn",
+								"us-east-2",
+								"elasticbeanstalk",
+								"com"
+							],
+							"path": [
+								"blacklists",
+								"correo@correo.com"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"is_in_black_list\": True, \n    \"reason\": \"Motivo genérico\"\n}"
+				},
+				{
+					"name": "Consulta con token inválido",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer OTRO_TOKEN",
+								"description": "Se debe enviar la palabra \"Bearer\" seguida del token suministrado para autenticación",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/blacklists/correo@correo.com",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"blacklists",
+								"correo@correo.com"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "Not authorized"
+				},
+				{
+					"name": "Consulta sin token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/blacklists/correo@correo.com",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"blacklists",
+								"correo@correo.com"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "Must authenticate"
+				}
+			]
+		},
+		{
+			"name": "Add Email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer TOKEN_EJEMPLO",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"carlos@email.com\",\r\n    \"app_uuid\":\"123\",\r\n    \"blocked_reason\":\"ugly\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/blacklists",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"blacklists"
+					]
+				},
+				"description": "Este recurso permite adicionar al API un correo electrónico a fin de adicionar en la lista negra de correos electrónicos.\n\nSi el correo consultado fue correctamente agregado se indica con un mensaje de exito"
+			},
+			"response": [
+				{
+					"name": "Add Email",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer TOKEN_EJEMPLO",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"carlos@email.com\",\r\n    \"app_uuid\":\"123\",\r\n    \"blocked_reason\":\"ugly\"\r\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/blacklists",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\"Code\": \"200\", \"message\": \"blacklist created\"}"
+				},
+				{
+					"name": "parametros incompletos",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer TOKEN_EJEMPLO",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"carlos@email.com\",\r\n    \"app_uuid\":\"123\"\r\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/blacklists",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\"status_code\": \"400\", \"message\": \"\"}"
+				},
+				{
+					"name": "no hay body",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer TOKEN_EJEMPLO",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/blacklists",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\"status_code\": \"404\", \"message\": \"NOT FOUND\"}"
+				},
+				{
+					"name": "no hay token",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer TOKEN_EJEMPLO",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"carlos@email.com\",\r\n    \"app_uuid\":\"123\",\r\n    \"blocked_reason\":\"ugly\"\r\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/blacklists",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "\"Must authenticate\""
+				},
+				{
+					"name": "no autorizado",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer TOKEN_EJEMPLO2",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"carlos@email.com\",\r\n    \"app_uuid\":\"123\",\r\n    \"blocked_reason\":\"ugly\"\r\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/blacklists",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "\"Not authorized\""
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://blacklist-c2jd-env-1.eba-k3fddmhn.us-east-2.elasticbeanstalk.com",
+			"type": "string"
+		}
+	]
+}
