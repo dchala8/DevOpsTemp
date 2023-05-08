@@ -24,8 +24,21 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push 309801132622.dkr.ecr.us-east-2.amazonaws.com/blacklist_c2jd:latest
-      - echo Stopping database...
-      - aws rds stop-db-instance --db-instance-identifier database-blacklist --no-cli-pager
+      - echo Writing Image Definitions file...
+      - printf '[{"name":"Container-ENT3","imageUri":"309801132622.dkr.ecr.us-east-2.amazonaws.com/blacklist_c2jd:latest"}]' > imagedefinitions.json
+      - printf '{"ImageURI":"309801132622.dkr.ecr.us-east-2.amazonaws.com/blacklist_c2jd:latest"}' > imageDetail.json
+      - cat imagedefinitions.json 
 artifacts:
   files:
     - '**/*'
+    - imagedefinitions.json
+    - imageDetail.json
+  secondary-artifacts:
+    DefinitionArtifact:
+      files:
+        - appspec.yaml
+        - taskdef.json
+    ImageArtifact:
+      files:
+        - imageDetail.json
+  
