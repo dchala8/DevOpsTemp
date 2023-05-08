@@ -1,12 +1,11 @@
-FROM alpine:3.14
-
-RUN apk add py3-pip \
-    && pip install --upgrade pip
+# Empezar corriendo una imagen de python 
+FROM python:3.10.6
+env FLASK_APP=application.py
 
 WORKDIR /app
 COPY . /app/
     
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 EXPOSE 5000
 

@@ -20,4 +20,4 @@ api.add_resource(ViewBlacklist, '/blacklists')
 api.add_resource(ViewBlacklistHealth, '/')
 
 if __name__ == "__main__":
-    application.run(port = 5000, debug = True)
+    application.run(port = 5000, debug = True, host='0.0.0.0')
