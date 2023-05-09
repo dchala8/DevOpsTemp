@@ -7,7 +7,7 @@
           "Properties": {
             "TaskDefinition": "<TASK_DEFINITION>",
             "LoadBalancerInfo": {
-              "ContainerName": "LB-ENT3",
+              "ContainerName": "Container-ENT3",
               "ContainerPort": 80
             }
           }
