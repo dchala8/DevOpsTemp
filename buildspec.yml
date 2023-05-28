@@ -1,0 +1,44 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Installing requirements...
+      - pip install -r requirements.txt
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 309801132622.dkr.ecr.us-east-2.amazonaws.com
+      - echo Start database...
+      # - aws rds start-db-instance --db-instance-identifier database-blacklist --no-cli-pager
+      - echo Waiting database start...
+      - aws rds wait db-instance-available --db-instance-identifier database-blacklist
+  build:
+    commands:
+      - echo Running tests...
+      - python -m unittest tests/tests.py
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker build -t blacklist_c2jd .
+      - docker tag blacklist_c2jd:latest 309801132622.dkr.ecr.us-east-2.amazonaws.com/ent3:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 309801132622.dkr.ecr.us-east-2.amazonaws.com/ent3:latest
+      - echo Writing Image Definitions file...
+      - printf '[{"name":"Container-ENT3","imageUri":"309801132622.dkr.ecr.us-east-2.amazonaws.com/ent3:latest"}]' > imagedefinitions.json
+      - printf '{"ImageURI":"309801132622.dkr.ecr.us-east-2.amazonaws.com/ent3:latest"}' > imageDetail.json
+      - cat imagedefinitions.json 
+artifacts:
+  files:
+    - '**/*'
+    - imagedefinitions.json
+    - imageDetail.json
+  secondary-artifacts:
+    DefinitionArtifact:
+      files:
+        - appspec.yaml
+        - taskdef.json
+    ImageArtifact:
+      files:
+        - imageDetail.json
+  
